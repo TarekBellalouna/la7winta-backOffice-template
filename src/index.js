@@ -5,18 +5,30 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 //
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import reportWebVitals from './reportWebVitals';
+//
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+let persistor = persistStore(store);
 
 // ----------------------------------------------------------------------
 
+
 ReactDOM.render(
   <HelmetProvider>
+    <Provider store={store}>
+  <PersistGate loading={null} persistor={persistor}>  
     <BrowserRouter>
       <App />
     </BrowserRouter>
+    </PersistGate>
+</Provider>
   </HelmetProvider>,
   document.getElementById('root')
 );

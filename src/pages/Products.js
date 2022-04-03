@@ -1,5 +1,8 @@
 import { useFormik } from 'formik';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteProduct, selectProducts } from '../redux/slices/productsSlice';
+import {queryApi} from '../utils/queryApi'
 // material
 import { Container, Stack, Typography } from '@mui/material';
 // components
@@ -17,6 +20,16 @@ import PRODUCTS from '../_mocks_/products';
 
 export default function EcommerceShop() {
   const [openFilter, setOpenFilter] = useState(false);
+
+  const dispatch = useDispatch();
+  const [products, err] = useSelector(selectProducts);
+
+  const deleteProductFunc = async (id) => {
+    const [, err] = await queryApi('products/delete-product/', {productId:id}, 'POST');
+    if (err) {
+      console.log(err);
+    } else dispatch(deleteProduct(id));
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -72,7 +85,7 @@ export default function EcommerceShop() {
           </Stack>
         </Stack>
 
-        <ProductList products={PRODUCTS} />
+        <ProductList products={products.products} deleteProduct={deleteProductFunc} />
         <ProductCartWidget />
       </Container>
     </Page>
