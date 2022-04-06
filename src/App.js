@@ -12,12 +12,15 @@ import { fetchProducts } from "./redux/slices/productsSlice";
 import { useDispatch } from "react-redux";
 import { useEffect } from 'react';
 import { fetchBrands } from './redux/slices/brandsSlice';
+import { fetchEvents } from './redux/slices/eventSlice';
 
 //------------------------
 export default function App() {
   const dispatch = useDispatch()
   useEffect(()=>{
   dispatch(fetchProducts())
+  //////////nour
+  dispatch(fetchEvents())
   dispatch(fetchBrands())
   },[])
   
