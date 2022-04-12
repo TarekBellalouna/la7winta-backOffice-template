@@ -1,6 +1,6 @@
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
@@ -16,25 +16,29 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination
+  TablePagination,
+  popoverClasses
 } from '@mui/material';
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
+import { selectUser,fetchUsers,deleteUser,deleteUsers } from 'src/redux/slices/userSlice';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 //
 import USERLIST from '../_mocks_/user';
+import { useDispatch,useSelector } from 'react-redux';
+import { CleaningServices } from '@mui/icons-material';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
+  { id: 'Name', label: 'Name', alignRight: false },
+  { id: 'Username', label: 'Username', alignRight: false },
+  { id: 'Phone', label: 'Phone', alignRight: false },
+  { id: 'Email', label: 'Email', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' }
 ];
@@ -71,13 +75,23 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function User() {
+
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+const [users,err] =useSelector(selectUser)
+const [userDeleted,errs] =useSelector(deleteUsers)
 
+const dispatch = useDispatch();
+useEffect(() => {
+   
+dispatch(fetchUsers())
+
+
+}, [userDeleted]) 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -167,16 +181,17 @@ export default function User() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers
+                  {users
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                      
+                      const { _id, name, username, status, phone, profile_picture, email } = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={id}
+                          key={_id}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
@@ -190,26 +205,27 @@ export default function User() {
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={avatarUrl} />
+                              <Avatar alt={name} src={profile_picture} />
                               <Typography variant="subtitle2" noWrap>
                                 {name}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{company}</TableCell>
-                          <TableCell align="left">{role}</TableCell>
-                          <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                          <TableCell align="left">
+                          <TableCell align="left">{username}</TableCell>
+                          <TableCell align="left">{phone}</TableCell>
+                          <TableCell align="left">{email}</TableCell>
+                          <TableCell align="left">{status ? 'Yes' : 'No'}</TableCell>
+                          {/* <TableCell align="left">
                             <Label
                               variant="ghost"
                               color={(status === 'banned' && 'error') || 'success'}
                             >
                               {sentenceCase(status)}
                             </Label>
-                          </TableCell>
+                          </TableCell> */}
 
-                          <TableCell align="right">
-                            <UserMoreMenu />
+                          <TableCell  align="right">
+                            <UserMoreMenu  id={row._id} status={row.status} />
                           </TableCell>
                         </TableRow>
                       );
@@ -220,7 +236,7 @@ export default function User() {
                     </TableRow>
                   )}
                 </TableBody>
-                {isUserNotFound && (
+                {/* {isUserNotFound && (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -228,7 +244,7 @@ export default function User() {
                       </TableCell>
                     </TableRow>
                   </TableBody>
-                )}
+                )} */}
               </Table>
             </TableContainer>
           </Scrollbar>
@@ -236,7 +252,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={users.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

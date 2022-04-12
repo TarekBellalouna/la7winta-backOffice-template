@@ -7,6 +7,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardApp from './pages/DashboardApp';
 import Products from './pages/Products';
+////////////////////////////// nour
+import Event from './pages/Event';
 import Brand from './pages/Brand';
 import Blog from './pages/Blog';
 import User from './pages/User';
@@ -25,7 +27,8 @@ export default function Router() {
         { path: 'products', element: <Products /> },
         { path: 'brand', element: <Brand /> },
         { path: 'category', element: <Products /> },
-        { path: 'blog', element: <Blog /> }
+        { path: 'blog', element: <Blog /> },
+        { path: 'event', element: <Event /> }
       ]
     },
     {
