@@ -214,16 +214,13 @@ dispatch(fetchUsers())
                           <TableCell align="left">{username}</TableCell>
                           <TableCell align="left">{phone}</TableCell>
                           <TableCell align="left">{email}</TableCell>
-                          <TableCell align="left">{status ? 'Yes' : 'No'}</TableCell>
-                          {/* <TableCell align="left">
-                            <Label
-                              variant="ghost"
-                              color={(status === 'banned' && 'error') || 'success'}
-                            >
-                              {sentenceCase(status)}
-                            </Label>
-                          </TableCell> */}
+                          <TableCell align="left">{status ? 
+                          <label  style={{backgroundColor: '#90EE90'}}>Activated</label>
 
+         : 
+         <label  style={{backgroundColor: 'white' , color: 'red'}}>Disactivated</label>
+         }
+         </TableCell>
                           <TableCell  align="right">
                             <UserMoreMenu  id={row._id} status={row.status} />
                           </TableCell>
