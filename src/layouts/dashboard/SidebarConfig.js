@@ -17,11 +17,6 @@ const sidebarConfig = [
     icon: getIcon('eva:people-fill')
   },
   {
-    title: 'event',
-    path: '/dashboard/event',
-    icon: getIcon('eva:people-fill')
-  },
-  {
     title: 'product',
     path: '/dashboard/products',
     icon: getIcon('eva:shopping-bag-fill')
@@ -37,21 +32,13 @@ const sidebarConfig = [
     path: '/dashboard/category',
     icon: getIcon('bxs:category-alt')
   },
+   
   {
-    title: 'blog',
-    path: '/dashboard/blog',
+    title: 'event',
+    path: '/dashboard/event',
     icon: getIcon('eva:file-text-fill')
   },
-  {
-    title: 'login',
-    path: '/login',
-    icon: getIcon('eva:lock-fill')
-  },
-  {
-    title: 'register',
-    path: '/register',
-    icon: getIcon('eva:person-add-fill')
-  },
+   
   {
     title: 'Not found',
     path: '/404',
