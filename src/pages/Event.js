@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteEvent, selectEvent } from '../redux/slices/eventSlice';
+import { deleteEvent,deleteEvents, selectEvent } from '../redux/slices/eventSlice';
 import {queryApi} from '../utils/queryApi'
 // material
 import { Container, Stack, Typography } from '@mui/material';
@@ -25,13 +25,9 @@ export default function EcommerceShop() {
   const dispatch = useDispatch();
  
   const [events, err] = useSelector(selectEvent);
+  
 console.log({events})
-  const deleteProductFunc = async (id) => {
-    const [, err] = await queryApi('products/delete-product/', {productId:id}, 'POST');
-    if (err) {
-      console.log(err);
-    } else dispatch(deleteProduct(id));
-  };
+
 
   const formik = useFormik({
     initialValues: {
@@ -87,7 +83,7 @@ console.log({events})
           </Stack>
         </Stack>
 
-        <EventList events={events} deleteProduct={deleteProductFunc} />
+        <EventList events={events} deleteEvent={deleteEvents} />
         <ProductCartWidget />
       </Container>
     </Page>
