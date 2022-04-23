@@ -12,17 +12,8 @@ import Button from '@mui/material/Button';
 import { Box, Card, Link, Typography, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
-import {useDispatch, useSelector} from "react-redux";
-import  { queryApi }  from '../../../utils/queryApi'
-// utils
-import { fCurrency } from '../../../utils/formatNumber';
-//
-import Label from '../../../components/Label';
-import ColorPreview from '../../../components/ColorPreview';
-
-
-// ----------------------------------------------------------------------
-
+import {useDispatch, useSelector} from "react-redux"; 
+ 
 const ProductImgStyle = styled('img')({
   top: 0,
   width: '100%',
@@ -71,8 +62,13 @@ export default function EventCard({ event , deleteProduct , history }) {
         </Typography>
       </CardContent>
       <CardActions>
+<<<<<<< Updated upstream
         <Button size="small" onClick={()=>deleteProduct(product._id)} >Delete</Button>
         {/* <Button >Learn More</Button> */}
+=======
+        <Button size="small" onClick={()=>dispatch(deleteEvent(event._id))} >Delete</Button>
+ 
+>>>>>>> Stashed changes
         <Button size="small" onClick={handleOpen}>
           Show Details
         </Button>
@@ -85,7 +81,7 @@ export default function EventCard({ event , deleteProduct , history }) {
           <Box sx={style}>
             <img src={image} class="img-thumbnail" alt={image}></img>
             <Typography id="modal-modal-title" variant="h3" component="h2">
-              {name}
+              {title}
             </Typography>
             <Divider variant="middle" />
 
