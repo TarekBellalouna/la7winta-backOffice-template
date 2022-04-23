@@ -1,8 +1,10 @@
 import { createSlice} from "@reduxjs/toolkit";
+import axios from "axios";
 import { queryApi} from "../../utils/queryApi";
 let initialState = {
 events: [],
 selectedEvent: {},
+deletedEvent:"",
 errors: "",
 };
 
@@ -21,11 +23,7 @@ unselectEvent(state) {
 state.selectedProduct = null;
 },
 deleteEvent: (state, action) => {
-const payload = action.payload;
-const index = state.products.findIndex((item) => item._id === payload);
-if (index !== -1) {
-state.products.splice(index, 1);
-}
+state.deletedEvent=action.payload
 },
 
 
@@ -45,9 +43,22 @@ dispatch(setErrors(error));
 dispatch(populateEvent(res));
 }
 };
+export const deleteEvents = (id) => async (dispatch) => {
+    const res = await axios.delete(`http://localhost:5000/event/delete/${id}`);
+    console.log(res)
+    
+        
+    dispatch(deleteEvent(res));
+    }
+    
 export const selectEvent = (state) => {
 return [state.events.events, state.events.errors];
 };
+export const deleteEventfunction = (state) => {
+    return [state.events.deletedEvent, state.events.errors];
+
+    
+    };
 export const selectSelectedProduct = (state) => {
 return state.products.selectedProduct;
 };
@@ -56,7 +67,7 @@ populateEvent,
 selectProduct,
 unselectProduct,
 setErrors,
-deleteProduct,
+deleteEvent,
 updateProduct,
 addProduct,
 } = eventSlice.actions;
