@@ -12,8 +12,17 @@ import Button from '@mui/material/Button';
 import { Box, Card, Link, Typography, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
-import {useDispatch, useSelector} from "react-redux"; 
- 
+import {useDispatch, useSelector} from "react-redux";
+import  { queryApi }  from '../../../utils/queryApi'
+// utils
+import { fCurrency } from '../../../utils/formatNumber';
+//
+import Label from '../../../components/Label';
+import ColorPreview from '../../../components/ColorPreview';
+
+
+// ----------------------------------------------------------------------
+
 const ProductImgStyle = styled('img')({
   top: 0,
   width: '100%',
@@ -41,7 +50,7 @@ const style = {
   p: 4
 };
 
-export default function EventCard({ event , deleteProduct , history }) {
+export default function EventCard({ event , deleteEvent , history }) {
   console.log(event)
   const { title, description, Startdate, Enddate, location,image, avatar } = event;
   console.log(avatar)
@@ -49,7 +58,7 @@ export default function EventCard({ event , deleteProduct , history }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
- 
+ const dispatch = useDispatch()
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia component="img" image={avatar} alt={title} />
@@ -62,13 +71,8 @@ export default function EventCard({ event , deleteProduct , history }) {
         </Typography>
       </CardContent>
       <CardActions>
-<<<<<<< Updated upstream
-        <Button size="small" onClick={()=>deleteProduct(product._id)} >Delete</Button>
-        {/* <Button >Learn More</Button> */}
-=======
         <Button size="small" onClick={()=>dispatch(deleteEvent(event._id))} >Delete</Button>
- 
->>>>>>> Stashed changes
+        {/* <Button >Learn More</Button> */}
         <Button size="small" onClick={handleOpen}>
           Show Details
         </Button>
@@ -81,7 +85,7 @@ export default function EventCard({ event , deleteProduct , history }) {
           <Box sx={style}>
             <img src={image} class="img-thumbnail" alt={image}></img>
             <Typography id="modal-modal-title" variant="h3" component="h2">
-              {title}
+              
             </Typography>
             <Divider variant="middle" />
 
