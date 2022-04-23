@@ -9,20 +9,22 @@ import { BaseOptionChartStyle } from './components/charts/BaseOptionChart';
 //redux 
 // ----------------------------------------------------------------------
 import { fetchProducts } from "./redux/slices/productsSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from 'react';
 import { fetchBrands } from './redux/slices/brandsSlice';
-import { fetchEvents } from './redux/slices/eventSlice';
-
+  
+import { deleteEvent, deleteEventfunction, fetchEvents } from './redux/slices/eventSlice';
+ 
 //------------------------
 export default function App() {
+  const [deletedEvent,errors] = useSelector(deleteEventfunction);
+
   const dispatch = useDispatch()
   useEffect(()=>{
   dispatch(fetchProducts())
-  //////////nour
-  dispatch(fetchEvents())
   dispatch(fetchBrands())
-  },[])
+
+  },[deletedEvent])
   
   return (
     <ThemeConfig>
