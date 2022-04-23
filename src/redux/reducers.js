@@ -1,14 +1,11 @@
 import {    combineReducers    } from "redux";
     import products from "./slices/productsSlice";
     import brands from "./slices/brandsSlice";
-<<<<<<< Updated upstream
+ import events from "./slices/eventSlice";
+ 
+ import users from "./slices/userSlice";
     const reducers = combineReducers({
-    products,brands
-=======
-    import events from "./slices/eventSlice";
-    import users from "./slices/userSlice"
-    const reducers = combineReducers({
-    products,brands, events,users
->>>>>>> Stashed changes
+    products,brands,events,users
+ 
     });
     export default reducers;
