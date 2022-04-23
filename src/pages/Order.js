@@ -58,6 +58,9 @@ const TABLE_HEAD = [
   { id: 'user_email', label: 'user_email', alignRight: false },
   { id: 'user_phone', label: 'user_phone', alignRight: false },
   { id: 'user_address', label: 'user_address', alignRight: false },
+  { id: 'isDelivered', label: 'isDelivered', alignRight: false },
+  { id: 'isPaid', label: 'isPaid', alignRight: false },
+
 
 
 ];
@@ -199,6 +202,9 @@ console.log("orders list : ", orderList)
   const [user_email, setUser_email] = useState("");
   const [user_phone, setUser_phone] = useState("");
   const [user_address, setUser_address] = useState("");
+  const [isDelivered, setIsDelivered] = useState("");
+  const [isPaid, setIsPaid] = useState("");
+
 
   const [code, setCode] = useState(null);
   const [value, setValue] = useState(null);
@@ -228,7 +234,7 @@ console.log("orders list : ", orderList)
 
 
   return (
-    <Page title="Coupons | La7winta">
+    <Page title="Orders | La7winta">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
@@ -300,12 +306,12 @@ console.log("orders list : ", orderList)
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map( (row) => {
-                      const { user_email, user_first_name , user_address, user_phone} = row;
+                      const { _id, user_email, user_first_name , user_address, user_phone, isDelivered, isPaid} = row;
                       const isItemSelected = selected.indexOf(type) !== -1;
                       return (
                         <TableRow
                           hover
-                          key={type}
+                          key={_id}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
@@ -314,9 +320,10 @@ console.log("orders list : ", orderList)
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, type)}
+                              onChange={(event) => handleClick(event, _id)}
                             />
                           </TableCell>
+                          
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
@@ -342,6 +349,20 @@ console.log("orders list : ", orderList)
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                  {user_address}
+                              </Typography>
+                            </Stack>
+                          </TableCell>
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              <Typography variant="subtitle2" noWrap>
+                                 {isDelivered.toString()}
+                              </Typography>
+                            </Stack>
+                          </TableCell>
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              <Typography variant="subtitle2" noWrap>
+                                 {isPaid.toString()}
                               </Typography>
                             </Stack>
                           </TableCell>
