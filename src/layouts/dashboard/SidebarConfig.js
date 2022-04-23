@@ -30,7 +30,7 @@ const sidebarConfig = [
   {
     title: 'orders',
     path: '/dashboard/orders',
-    icon: getIcon('bxs:coupon')
+    icon: getIcon('bxs:truck')
   },
   {
     title: 'categories',
