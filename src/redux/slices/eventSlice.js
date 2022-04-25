@@ -3,6 +3,7 @@ import axios from "axios";
 import { queryApi} from "../../utils/queryApi";
 let initialState = {
 events: [],
+eventsCount:null,
 selectedEvent: {},
 deletedEvent:"",
 errors: "",
@@ -25,7 +26,9 @@ state.selectedProduct = null;
 deleteEvent: (state, action) => {
 state.deletedEvent=action.payload
 },
-
+getEventCount(state,action){
+    state.eventsCount=action.payload
+},
 
 setErrors(state, action) {
 state.errors = action.payload;
@@ -43,6 +46,16 @@ dispatch(setErrors(error));
 dispatch(populateEvent(res));
 }
 };
+export const fetchEventsCount = (from,to) => async (dispatch) => {
+    const [res, error] = await queryApi(`event/getEventsByTime?from=${from}&to=${to}`);
+    console.log(res)
+    if (error) {
+    dispatch(setErrors(error));
+    } else {
+        
+    dispatch(getEventCount(res));
+    }
+    };
 export const deleteEvents = (id) => async (dispatch) => {
     const res = await axios.delete(`http://localhost:5000/event/delete/${id}`);
     console.log(res)
@@ -54,6 +67,9 @@ export const deleteEvents = (id) => async (dispatch) => {
 export const selectEvent = (state) => {
 return [state.events.events, state.events.errors];
 };
+export const selectEventCount = (state) => {
+    return [state.events.eventsCount, state.events.errors];
+    };
 export const deleteEventfunction = (state) => {
     return [state.events.deletedEvent, state.events.errors];
 
@@ -64,6 +80,7 @@ return state.products.selectedProduct;
 };
 export const {
 populateEvent,
+getEventCount,
 selectProduct,
 unselectProduct,
 setErrors,

@@ -31,6 +31,7 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashbo
 import USERLIST from '../_mocks_/user';
 import { useDispatch,useSelector } from 'react-redux';
 import { CleaningServices } from '@mui/icons-material';
+import { red } from '@mui/material/colors';
 
 // ----------------------------------------------------------------------
 
@@ -138,9 +139,9 @@ dispatch(fetchUsers())
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(users, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -151,15 +152,8 @@ dispatch(fetchUsers())
           <Typography variant="h4" gutterBottom>
             User
           </Typography>
-          <Button
-            variant="contained"
-            component={RouterLink}
-            to="#"
-            startIcon={<Iconify icon="eva:plus-fill" />}
-          >
-            New User
-          </Button>
-        </Stack>
+          </Stack>
+        
 
         <Card>
           <UserListToolbar
@@ -168,19 +162,19 @@ dispatch(fetchUsers())
             onFilterName={handleFilterByName}
           />
 
-          <Scrollbar>
+<Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
                 <UserListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={users.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
-                <TableBody>
+               <TableBody>
                   {users
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
@@ -221,6 +215,15 @@ dispatch(fetchUsers())
          <label  style={{backgroundColor: 'white' , color: 'red'}}>Disactivated</label>
          }
          </TableCell>
+                          {/* <TableCell align="left">
+                            <Label
+                              variant="ghost"
+                              color={(status === 'banned' && 'error') || 'success'}
+                            >
+                              {sentenceCase(status)}
+                            </Label>
+                          </TableCell> */}
+
                           <TableCell  align="right">
                             <UserMoreMenu  id={row._id} status={row.status} />
                           </TableCell>
@@ -233,7 +236,7 @@ dispatch(fetchUsers())
                     </TableRow>
                   )}
                 </TableBody>
-                {/* {isUserNotFound && (
+                {isUserNotFound && (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -241,7 +244,7 @@ dispatch(fetchUsers())
                       </TableCell>
                     </TableRow>
                   </TableBody>
-                )} */}
+                )}
               </Table>
             </TableContainer>
           </Scrollbar>
