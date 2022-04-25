@@ -1,17 +1,17 @@
 import { createSlice} from "@reduxjs/toolkit";
 import { queryApi} from "../../utils/queryApi";
 let initialState = {
-brands: [],
+coupons: [],
 selectedBrand: {},
 errors: "",
 };
 
 const BrandsSlice = createSlice({
-name: "brands",
+name: "coupons",
 initialState,
 reducers: {
 populateBrands(state, action) {
-state.brands = action.payload;
+state.coupons = action.payload;
 },
 selectBrand(state, action) {
 state.selectedBrand = action.payload;
@@ -21,9 +21,9 @@ state.selectedBrand = null;
 },
 deleteBrand: (state, action) => {
 const payload = action.payload;
-const index = state.brands.findIndex((item) => item._id === payload);
+const index = state.coupons.findIndex((item) => item._id === payload);
 if (index !== -1) {
-state.brands.splice(index, 1);
+state.coupons.splice(index, 1);
 }
 },
 updateBrand: (state, action) => {
@@ -37,7 +37,7 @@ state.brands[index] = payload;
 },
 addBrand: (state, action) => {
 const payload = action.payload;
-state.brands.push(payload);
+state.coupons.push(payload);
 },
 setErrors(state, action) {
 state.errors = action.payload;
@@ -54,7 +54,7 @@ dispatch(populateBrands(res));
 }
 };
 export const selectBrands = (state) => {
-return [state.brands.brands, state.brands.errors];
+return [state.coupons.coupons, state.coupons.errors];
 };
 export const selectSelectedBrand = (state) => {
 return state.brands.selectedBrand;

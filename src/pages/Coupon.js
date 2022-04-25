@@ -87,7 +87,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (brands) => brands.type.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (coupons) => coupons.type.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -101,10 +101,10 @@ export default function Coupon() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  // get all brands   
+  // get all coupons   
   const dispatch = useDispatch();
-  const [brands, err] = useSelector(selectBrands);
-  //console.log(brands);
+  const [coupons, err] = useSelector(selectBrands);
+  console.log("coupons list: ",coupons);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -114,7 +114,7 @@ export default function Coupon() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = brands.map((n) => n.type);
+      const newSelecteds = coupons.map((n) => n.type);
       setSelected(newSelecteds);
       return;
     }
@@ -155,9 +155,9 @@ export default function Coupon() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - brands.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - coupons.length) : 0;
 
-  const filteredUsers = applySortFilter(brands, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(coupons, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -279,7 +279,7 @@ export default function Coupon() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={brands.length}
+                  rowCount={coupons.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -355,13 +355,14 @@ export default function Coupon() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={brands.length}
+            count={coupons.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
+        <button>test</button>
       </Container>
     </Page>
   );
