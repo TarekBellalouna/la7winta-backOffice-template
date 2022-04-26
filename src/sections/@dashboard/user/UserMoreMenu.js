@@ -25,7 +25,7 @@ const style = {
   p: 4,
 };
 
-export default function UserMoreMenu() {
+export default function UserMoreMenu({id,deleteComment}) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = React.useState(false);
@@ -53,7 +53,7 @@ export default function UserMoreMenu() {
           <ListItemIcon>
             <Iconify icon="eva:trash-2-outline" width={24} height={24} />
           </ListItemIcon>
-          <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
+          <ListItemText primary="Delete" onClick={()=>deleteComment(id)} primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
         <MenuItem component={RouterLink} to="#" sx={{ color: 'text.secondary' }}>
