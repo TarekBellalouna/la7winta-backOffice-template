@@ -12,6 +12,8 @@ import Button from '@mui/material/Button';
 
 // component
 import Iconify from '../../../components/Iconify';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteUsers,deleteUser,disableUser } from 'src/redux/slices/userSlice';
 
 // ----------------------------------------------------------------------
 const style = {
@@ -26,13 +28,17 @@ const style = {
   p: 4,
 };
 
+
 export default function UserMoreMenu({product}) {
   console.log(product)
   const ref = useRef(null);
+  
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [userDeleted,errs] =useSelector(deleteUsers)
+  const dispatch = useDispatch()
   const [name, setName] = useState(product.name);
   const [image, setImage] = useState(product.image);
   
@@ -76,13 +82,15 @@ export default function UserMoreMenu({product}) {
           <ListItemIcon>
             <Iconify icon="eva:trash-2-outline" width={24} height={24} />
           </ListItemIcon>
-          <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
+          <ListItemText  onClick={()=>dispatch(deleteUser(id))} primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
         <MenuItem component={RouterLink} to="#" sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Iconify icon="eva:edit-fill" width={24} height={24} />
           </ListItemIcon>
+          <ListItemText onClick={()=>dispatch(disableUser(id))} primary={status?"Disable":"Enable"}  />
+         
          
           {/* <Button onClick={handleOpen}>Open modal</Button> */}
         

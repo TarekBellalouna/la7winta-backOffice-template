@@ -3,16 +3,19 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
+import Coupon from './pages/Coupon';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardApp from './pages/DashboardApp';
 import Products from './pages/Products';
+////////////////////////////// nour
+import Event from './pages/Event';
 import Brand from './pages/Brand';
 import Category from './pages/Category';
 import Blog from './pages/Blog';
 import User from './pages/User';
-import NotFound from './pages/Page404';
-
+import NotFound from './pages/Page404'; 
+import Order from './pages/Order';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -25,8 +28,14 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
         { path: 'brand', element: <Brand /> },
-        { path: 'category', element: <Category /> },
-        { path: 'blog', element: <Blog /> }
+
+         
+        { path: 'coupons', element: <Coupon /> },
+        { path: 'orders', element: <Order /> },
+        { path: 'category', element: <Products /> },
+        { path: 'blog', element: <Blog /> },
+        { path: 'event', element: <Event /> }
+
       ]
     },
     {

@@ -39,6 +39,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 
 
+
 export default function AppWeeklySales() {
   const dispatch = useDispatch()
   const [products, err] = useSelector(selectProducts);
@@ -48,9 +49,10 @@ export default function AppWeeklySales() {
       <IconWrapperStyle>
         <Iconify icon="ant-design:android-filled" width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
+      <Typography variant="h3">{fShortenNumber(users.length)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        Products
+        Total Users{' '}
+
       </Typography>
     </RootStyle>
   );
