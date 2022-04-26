@@ -10,6 +10,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
   import { useEffect } from 'react';
   import axios from "axios"; 
+  import emailjs from "emailjs-com";
+
 
 
 // component
@@ -48,7 +50,17 @@ export default function UserMoreMenu({code}) {
 
   
     }; 
-    
+    const form = useRef();
+    const sendEmail = (e) => {
+      e.preventDefault();
+
+      emailjs.sendForm('service_vpdv6s5', 'template_wzd12hd', form.current, '3V11wABCO2HI6Ci23')
+        .then((result) => {
+            console.log(result.text);
+        }, (error) => {
+            console.log(error.text);
+        });
+    }
   return (
     <> 
     
@@ -73,6 +85,8 @@ export default function UserMoreMenu({code}) {
           </ListItemIcon>
           <ListItemText onClick={deleteCoupon} primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
+
+        
 
         <MenuItem component={RouterLink} to="#" sx={{ color: 'text.secondary' }}>
           <ListItemIcon>

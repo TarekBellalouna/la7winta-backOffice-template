@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState , useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteBrand, selectBrands } from '../redux/slices/couponsSlice';
@@ -10,8 +10,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios"; 
-
-
+import emailjs from "emailjs-com";
 // material
 import {
   Card,
@@ -26,7 +25,10 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination
+  TablePagination,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -57,6 +59,7 @@ const TABLE_HEAD = [
   { id: 'type', label: 'Type', alignRight: false },
   { id: 'code', label: 'Code', alignRight: false },
   { id: 'value', label: 'Value', alignRight: false },
+
 
 
 ];
@@ -186,8 +189,7 @@ export default function Coupon() {
   const [type, setType] = useState("");
   const [code, setCode] = useState(makeid(5));
   const [value, setValue] = useState(null);
-
-
+  
 
   const handleAddBrand = async (e) => {
     e.preventDefault();
@@ -208,9 +210,8 @@ export default function Coupon() {
     
   };
 
-  
 
-//console.log("makeid: ",makeid(5));
+//console.log("selected: ",selected[0]);
 
 
 
@@ -270,6 +271,7 @@ export default function Coupon() {
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
+            selected={selected[0]}
           />
 
           <Scrollbar>
@@ -289,7 +291,7 @@ export default function Coupon() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map( (row) => {
                       const { type, code , value} = row;
-                      const isItemSelected = selected.indexOf(type) !== -1;
+                      const isItemSelected = selected.indexOf(code) !== -1;
                       return (
                         <TableRow
                           hover
@@ -302,7 +304,7 @@ export default function Coupon() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, type)}
+                              onChange={(event) => handleClick(event, code)}
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
@@ -326,9 +328,12 @@ export default function Coupon() {
                               </Typography>
                             </Stack>
                           </TableCell>
+                          
                      
                           <TableCell align="right">
+                          <Stack direction="row" alignItems="center" spacing={2}>
                             <UserMoreMenu code= {code}/>
+                            </Stack>
                           </TableCell>
                         </TableRow>
                       );
@@ -362,8 +367,9 @@ export default function Coupon() {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
-        <button>test</button>
+        
       </Container>
+      
     </Page>
   );
 }

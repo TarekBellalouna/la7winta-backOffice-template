@@ -7,10 +7,18 @@ import {
   IconButton,
   Typography,
   OutlinedInput,
-  InputAdornment
+  InputAdornment,
+  Button,
+  Select,
+  MenuItem, 
+  InputLabel,
+  NativeSelect,
+  FormControl
 } from '@mui/material';
 // component
 import Iconify from '../../../components/Iconify';
+import emailjs from "emailjs-com";
+import { useState , useRef } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +50,28 @@ UserListToolbar.propTypes = {
   onFilterName: PropTypes.func
 };
 
-export default function UserListToolbar({ numSelected, filterName, onFilterName }) {
+
+
+export default function UserListToolbar({ numSelected, filterName, onFilterName, selected }) {
+
+  console.log("selected: ",selected)
+
+  const form = useRef();
+  function sendEmail(e){
+    e.preventDefault();
+
+    emailjs.sendForm('service_vpdv6s5', 'template_wzd12hd', form.current, '3V11wABCO2HI6Ci23')
+      .then((result) => {
+          console.log(result.text);
+      }, (error) => {
+          console.log(error.text);
+      });
+  }
+
+  const [mail, setMail] = useState(0);
+  const handleChanges = (event) => {
+    setMail(event.target.value);
+  };
   return (
     <RootStyle
       sx={{
@@ -70,11 +99,31 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName 
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Iconify icon="eva:trash-2-fill" />
-          </IconButton>
-        </Tooltip>
+       
+        <form ref={form} onSubmit={sendEmail}> 
+        <input hidden type="text" value={selected} name="code" /> 
+
+
+        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>   
+  <Select
+          labelId="demo-simple-select-standard-label"
+          id="demo-simple-select-standard"
+          value={mail}
+          label="Age"
+          onChange={handleChanges}
+        >
+          
+          <MenuItem value={1}>elae.debichi@esprit.tn</MenuItem>
+          <MenuItem value={2}>elae.debichi@esprit.tn</MenuItem>
+          <MenuItem value={3}>elae.debichi@esprit.tn</MenuItem>
+        </Select>
+     </FormControl>
+&nbsp;&nbsp;
+
+        <Button size="  large" variant="contained" startIcon={<Iconify icon="eva:email-outline" />} type="submit">
+          send
+          </Button>    
+        </form>
       ) : (
         <Tooltip title="Filter list">
           <IconButton>
