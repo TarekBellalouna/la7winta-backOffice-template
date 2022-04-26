@@ -21,17 +21,27 @@ const sidebarConfig = [
     path: '/dashboard/products',
     icon: getIcon('eva:shopping-bag-fill')
   },
-  
   {
     title: 'brands',
     path: '/dashboard/brand',
     icon: getIcon('bxs:category-alt')
   },
   {
+    title: 'comment',
+    path: '/dashboard/comment',
+    icon: getIcon('ep:comment')
+  },
+  {
+    title: 'rating',
+    path: '/dashboard/rating',
+    icon: getIcon('ant-design:star-filled')
+  },
+  {
     title: 'categories',
     path: '/dashboard/category',
     icon: getIcon('bxs:category-alt')
   },
+  
   {
     title: 'blog',
     path: '/dashboard/blog',
