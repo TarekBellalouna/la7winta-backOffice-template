@@ -85,7 +85,7 @@ export default function EventCard({ event , deleteEvent , history }) {
           <Box sx={style}>
             <img src={image} class="img-thumbnail" alt={image}></img>
             <Typography id="modal-modal-title" variant="h3" component="h2">
-              
+
             </Typography>
             <Divider variant="middle" />
 

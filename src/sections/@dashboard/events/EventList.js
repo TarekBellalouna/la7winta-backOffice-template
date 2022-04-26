@@ -10,11 +10,12 @@ EventList.propTypes = {
 };
 
 export default function EventList({ events  ,deleteProduct}) {
+
   return (
     <Grid container spacing={3} >
       {events.map((event) => (
         <Grid key={event._id} item xs={12} sm={6} md={3}>
-          <ShopProductCard event={event} deleteProduct={deleteProduct}  />
+
         </Grid>
       ))}
     </Grid>

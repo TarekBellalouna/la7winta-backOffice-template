@@ -1,7 +1,27 @@
+import * as React from 'react';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteComment, selectComments } from '../redux/slices/commentSlice';
+import Form from 'react-bootstrap/Form';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import { mockImgAvatar } from '../utils/mockImages';
+
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4
+};
 // material
 import {
   Card,
@@ -16,32 +36,26 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination,
-  popoverClasses
+  TablePagination
 } from '@mui/material';
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
-import { selectUser,fetchUsers,deleteUser,deleteUsers } from 'src/redux/slices/userSlice';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
+import {queryApi} from '../utils/queryApi'
 //
 import USERLIST from '../_mocks_/user';
-import { useDispatch,useSelector } from 'react-redux';
-import { CleaningServices } from '@mui/icons-material';
-import { red } from '@mui/material/colors';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'Name', label: 'Name', alignRight: false },
-  { id: 'Username', label: 'Username', alignRight: false },
-  { id: 'Phone', label: 'Phone', alignRight: false },
-  { id: 'Email', label: 'Email', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
-  { id: '' }
+  { id: 'name', label: 'Comment Title', alignRight: false },
+  { id: 'image', label: 'User', alignRight: false },
+  { id: '' },
+  { id: 'description', label: 'Description', alignRight: false }
 ];
 
 // ----------------------------------------------------------------------
@@ -70,29 +84,31 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.title.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function User() {
-
+export default function Comment() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
-const [users,err] =useSelector(selectUser)
-const [userDeleted,errs] =useSelector(deleteUsers)
+  // get all comments
+  const dispatch = useDispatch();
+  const [comments, err] = useSelector(selectComments);
+  console.log(comments.comments);
 
-const dispatch = useDispatch();
-useEffect(() => {
-   
-dispatch(fetchUsers())
+  const deleteCommentFunc = async (id) => {
+      //console.log(id)
+    const [, err] = await queryApi('comments/delete-comment', {_id:id}, 'DELETE');
+    if (err) {
+      console.log(err);
+    } else dispatch(deleteComment(id));
+  };
 
-
-}, [userDeleted]) 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -101,7 +117,7 @@ dispatch(fetchUsers())
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = comments.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -139,21 +155,78 @@ dispatch(fetchUsers())
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - comments.length) : 0;
 
-  const filteredUsers = applySortFilter(users, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(comments.comments, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
+
+
+  const handleAddComment = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("image", image);
+
+    const [res, err] = await queryApi('comment/upload/', formData, 'POST',true);
+      if (res.data.message === "Comment added") {
+                      setImage("");
+                      setName("");
+                      setErrors('');
+                    }
+                    dispatch(addProduct(res))
+  };
+
   return (
-    <Page title="User | Minimal-UI">
+    <Page title="Comment | La7winta">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            Comment
           </Typography>
-          </Stack>
-        
+          <Button
+            variant="contained"
+            component={RouterLink}
+            to="#"
+            onClick={handleOpen}
+            startIcon={<Iconify icon="eva:plus-fill" />}
+          >
+            New Comment
+          </Button>
+
+
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Form onSubmit={()=>handleAddComment} >
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control  type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter Comment name" />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                  <Form.Label>Comment Logo</Form.Label>
+                  <Form.Control type="file"  onChange={(e) => setImage(e.target.files[0])} placeholder="Please select an image" />
+                </Form.Group>
+
+                <Button type="submit" variant="contained"  color="success">
+                  Add
+                </Button>
+              </Form>
+            </Box>
+          </Modal>
+
+        </Stack>
 
         <Card>
           <UserListToolbar
@@ -162,32 +235,29 @@ dispatch(fetchUsers())
             onFilterName={handleFilterByName}
           />
 
-<Scrollbar>
+          <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
                 <UserListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={users.length}
+                  rowCount={comments.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
-               <TableBody>
-                  {users.filter(
-                      (user) => user.name.includes(filterName) || user.username.includes(filterName)
-                    )
+                <TableBody>
+                  {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      
-                      const { _id, name, username, status, phone, profile_picture, email } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const { id,_id, title, contenue,user, image=mockImgAvatar(3) } = row;
+                      const isItemSelected = selected.indexOf(title) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={_id}
+                          key={id}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
@@ -196,31 +266,21 @@ dispatch(fetchUsers())
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
+                              onChange={(event) => handleClick(event, title)}
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={profile_picture} />
                               <Typography variant="subtitle2" noWrap>
-                                {name}
+                                {title}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{username}</TableCell>
-                          <TableCell align="left">{phone}</TableCell>
-                          <TableCell align="left">{email}</TableCell>
-                          <TableCell align="left">{status ? 
-                          <label  style={{backgroundColor: '#90EE90'}}>Activated</label>
-
-         : 
-         <label  style={{backgroundColor: 'white' , color: 'red'}}>Disactivated</label>
-         }
-         </TableCell>
-                          
-
-                          <TableCell  align="right">
-                            <UserMoreMenu  id={row._id} status={row.status} />
+                          <Avatar alt={title} src={image} />
+                          <TableCell>{user}</TableCell>
+                          <TableCell>{contenue}</TableCell>
+                          <TableCell align="right">
+                            <UserMoreMenu id={_id} deleteComment={deleteCommentFunc} />
                           </TableCell>
                         </TableRow>
                       );
@@ -247,7 +307,7 @@ dispatch(fetchUsers())
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={users.length}
+            count={comments.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

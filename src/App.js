@@ -16,6 +16,7 @@ import { fetchBrands } from './redux/slices/brandsSlice';
 import { deleteEvent, deleteEventfunction, fetchEvents } from './redux/slices/eventSlice';
  
 //------------------------
+
 export default function App() {
   const [deletedEvent,errors] = useSelector(deleteEventfunction);
 
@@ -25,6 +26,15 @@ export default function App() {
   dispatch(fetchBrands())
 
   },[deletedEvent])
+  dispatch(fetchComments())
+  dispatch(fetchRatings())
+
+
+  dispatch(fetchCategories())
+  
+
+  },[])
+
   
   return (
     <ThemeConfig>

@@ -36,15 +36,15 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 const TOTAL = 1723315;
 
-export default function AppItemOrders() {
+export default function AppItemOrders({ donations }) {
   return (
     <RootStyle>
       <IconWrapperStyle>
         <Iconify icon="ant-design:windows-filled" width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
+      <Typography variant="h3">{fShortenNumber(donations.donations.length)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-        Item Orders
+        Total Donations
       </Typography>
     </RootStyle>
   );
