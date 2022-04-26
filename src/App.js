@@ -12,6 +12,8 @@ import { fetchProducts } from "./redux/slices/productsSlice";
 import { useDispatch } from "react-redux";
 import { useEffect } from 'react';
 import { fetchBrands } from './redux/slices/brandsSlice';
+import { fetchComments } from './redux/slices/commentSlice';
+import { fetchRatings } from './redux/slices/ratingSlice';
 
 //------------------------
 export default function App() {
@@ -19,6 +21,8 @@ export default function App() {
   useEffect(()=>{
   dispatch(fetchProducts())
   dispatch(fetchBrands())
+  dispatch(fetchComments())
+  dispatch(fetchRatings())
   },[])
   
   return (
