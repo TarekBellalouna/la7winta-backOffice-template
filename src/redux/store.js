@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import rootReducers from "./reducers";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
-import {compose} from 'redux';
 import thunk from "redux-thunk";
 const persistConfig = {
 key: "root",
