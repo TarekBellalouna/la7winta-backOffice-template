@@ -11,6 +11,8 @@ import Products from './pages/Products';
 ////////////////////////////// nour
 import Event from './pages/Event';
 import Brand from './pages/Brand';
+import Comment from './pages/Comment';
+import Rating from './pages/Rating';
 import Category from './pages/Category';
 import Blog from './pages/Blog';
 import User from './pages/User';
@@ -28,6 +30,8 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
         { path: 'brand', element: <Brand /> },
+        { path: 'comment', element: <Comment /> },
+        { path: 'rating', element: <Rating /> },
 
          
         { path: 'coupons', element: <Coupon /> },

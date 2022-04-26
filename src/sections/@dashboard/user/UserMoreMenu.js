@@ -28,6 +28,7 @@ const style = {
   p: 4,
 };
 
+export default function UserMoreMenu({id,deleteComment}) {
 
 export default function UserMoreMenu({product}) {
   console.log(product)
@@ -82,6 +83,7 @@ export default function UserMoreMenu({product}) {
           <ListItemIcon>
             <Iconify icon="eva:trash-2-outline" width={24} height={24} />
           </ListItemIcon>
+          <ListItemText primary="Delete" onClick={()=>deleteComment(id)} primaryTypographyProps={{ variant: 'body2' }} />
           <ListItemText  onClick={()=>dispatch(deleteUser(id))} primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
