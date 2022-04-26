@@ -7,6 +7,9 @@ import { fShortenNumber } from '../../../utils/formatNumber';
 import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
+import { useDispatch , useSelector} from "react-redux";
+import { useEffect } from 'react';
+import { selectProducts } from '../../../redux/slices/productsSlice';
 
 const RootStyle = styled(Card)(({ theme }) => ({
   boxShadow: 'none',
@@ -34,9 +37,13 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const TOTAL = 714000;
 
-export default function AppWeeklySales({ users }) {
+
+
+export default function AppWeeklySales() {
+  const dispatch = useDispatch()
+  const [products, err] = useSelector(selectProducts);
+  const TOTAL = products.length;
   return (
     <RootStyle>
       <IconWrapperStyle>
@@ -45,6 +52,7 @@ export default function AppWeeklySales({ users }) {
       <Typography variant="h3">{fShortenNumber(users.length)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         Total Users{' '}
+
       </Typography>
     </RootStyle>
   );

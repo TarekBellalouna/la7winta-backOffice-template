@@ -12,7 +12,9 @@ import { fetchProducts } from "./redux/slices/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from 'react';
 import { fetchBrands } from './redux/slices/brandsSlice';
+
 import { deleteEvent, deleteEventfunction, fetchEvents } from './redux/slices/eventSlice';
+
 import { fetchCategories } from './redux/slices/categorySlice';
 
 export default function App() {
@@ -22,10 +24,11 @@ export default function App() {
   useEffect(()=>{
   dispatch(fetchProducts())
   dispatch(fetchBrands())
-  dispatch(fetchEvents())
-  dispatch(fetchCategories())
 
-  },[deletedEvent])
+  dispatch(fetchCategories())
+  
+  },[])
+
   
   return (
     <ThemeConfig>

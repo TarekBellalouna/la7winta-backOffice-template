@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import * as React from 'react';
+import Form from 'react-bootstrap/Form';
 
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -27,7 +28,9 @@ const style = {
   p: 4,
 };
 
-export default function UserMoreMenu({id,status}) {
+
+export default function UserMoreMenu({product}) {
+  console.log(product)
   const ref = useRef(null);
   
   const [isOpen, setIsOpen] = useState(false);
@@ -36,6 +39,27 @@ export default function UserMoreMenu({id,status}) {
   const handleClose = () => setOpen(false);
   const [userDeleted,errs] =useSelector(deleteUsers)
   const dispatch = useDispatch()
+  const [name, setName] = useState(product.name);
+  const [image, setImage] = useState(product.image);
+  
+
+  const handleEditBrand = async (e,id) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("image", image);
+   
+    try {
+      const [res, err] = await queryApi('brand/edit-brand/'+id, {name,image}, 'PUT',true);
+      console.log(formData)
+     
+                      dispatch(updateBrand(res))
+                    
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
   return (
     <> 
     
@@ -43,7 +67,7 @@ export default function UserMoreMenu({id,status}) {
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
         <Iconify icon="eva:more-vertical-fill" width={20} height={20} />
       </IconButton>
-
+      
       <Menu
         open={isOpen}
         anchorEl={ref.current}
@@ -67,8 +91,12 @@ export default function UserMoreMenu({id,status}) {
           </ListItemIcon>
           <ListItemText onClick={()=>dispatch(disableUser(id))} primary={status?"Disable":"Enable"}  />
          
+         
+          {/* <Button onClick={handleOpen}>Open modal</Button> */}
+        
         </MenuItem>
       </Menu>
+        
     </>
   );
 }

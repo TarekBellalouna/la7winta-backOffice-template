@@ -14,7 +14,6 @@ import {
   ProductFilterSidebar
 } from '../sections/@dashboard/products';
 //
-import PRODUCTS from '../_mocks_/products';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +21,8 @@ export default function EcommerceShop() {
   const [openFilter, setOpenFilter] = useState(false);
 
   const dispatch = useDispatch();
-  const [products, err] = useSelector(selectProducts);
+  const [product, err] = useSelector(selectProducts);
+  const [products, setProducts] = useState(product);
 
   const deleteProductFunc = async (id) => {
     const [, err] = await queryApi('products/delete-product/', {productId:id}, 'POST');
