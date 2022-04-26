@@ -175,7 +175,9 @@ dispatch(fetchUsers())
                   onSelectAllClick={handleSelectAllClick}
                 />
                <TableBody>
-                  {users
+                  {users.filter(
+                      (user) => user.name.includes(filterName) || user.username.includes(filterName)
+                    )
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       
@@ -215,14 +217,7 @@ dispatch(fetchUsers())
          <label  style={{backgroundColor: 'white' , color: 'red'}}>Disactivated</label>
          }
          </TableCell>
-                          {/* <TableCell align="left">
-                            <Label
-                              variant="ghost"
-                              color={(status === 'banned' && 'error') || 'success'}
-                            >
-                              {sentenceCase(status)}
-                            </Label>
-                          </TableCell> */}
+                          
 
                           <TableCell  align="right">
                             <UserMoreMenu  id={row._id} status={row.status} />
