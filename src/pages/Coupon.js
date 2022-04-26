@@ -59,6 +59,7 @@ const TABLE_HEAD = [
   { id: 'type', label: 'Type', alignRight: false },
   { id: 'code', label: 'Code', alignRight: false },
   { id: 'value', label: 'Value', alignRight: false },
+  { id: 'isUsed', label: 'isUsed', alignRight: false },
 
 
 
@@ -189,20 +190,22 @@ export default function Coupon() {
   const [type, setType] = useState("");
   const [code, setCode] = useState(makeid(5));
   const [value, setValue] = useState(null);
-  
+  const [isUsed, setIsUsed] = useState("no");
+
 
   const handleAddBrand = async (e) => {
     e.preventDefault();
     console.log("handleAddBrand:")
 
-    console.log("type, code, value:")
+    console.log("type, code, value, isUsed:")
     //console.log(formData)
-    console.log(type, code, value)
+    console.log(type, code, value, isUsed)
 
     await axios.post('http://localhost:5000/coupon/addcoupon',{
       "type":type,
       "code":code,
-      "value":value
+      "value":value,
+      "isUsed":isUsed
     }).then(()=>{
       window.location.reload();
 
@@ -290,7 +293,7 @@ export default function Coupon() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map( (row) => {
-                      const { type, code , value} = row;
+                      const { type, code , value, isUsed} = row;
                       const isItemSelected = selected.indexOf(code) !== -1;
                       return (
                         <TableRow
@@ -325,6 +328,13 @@ export default function Coupon() {
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
                                  -{value} %
+                              </Typography>
+                            </Stack>
+                          </TableCell>
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              <Typography variant="subtitle2" noWrap>
+                                 {isUsed}
                               </Typography>
                             </Stack>
                           </TableCell>
