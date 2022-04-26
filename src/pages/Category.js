@@ -5,11 +5,11 @@ import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  deleteBrand,
-  updateBrand,
-  selectBrands,
-  addBrand,
-} from "../redux/slices/brandsSlice";
+  deleteCategory,
+  updateCategory,
+  selectCategories,
+  addCategory,
+} from "../redux/slices/categorySlice";
 import Form from "react-bootstrap/Form";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -43,7 +43,6 @@ import {
 } from "../sections/@dashboard/user";
 import { queryApi } from "../utils/queryApi";
 //
-import USERLIST from "../_mocks_/user";
 
 // ----------------------------------------------------------------------
 
@@ -62,7 +61,8 @@ const style = {
 
 const TABLE_HEAD = [
   { id: "name", label: "Name", alignRight: false },
-  { id: "image", label: "Logo", alignRight: false },
+  { id: "edit", label: "Edit", alignRight: false },
+  { id: "delete", label: "Delete", alignRight: false },
   { id: "" },
 ];
 
@@ -100,17 +100,17 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function Brand() {
+export default function Category() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  // get all brands
+  // get all Categories
   const dispatch = useDispatch();
-  const [brands, err] = useSelector(selectBrands);
-  // console.log(brands);
+  const [Categories, err] = useSelector(selectCategories);
+  // console.log(Categories);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -120,8 +120,8 @@ export default function Brand() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = brands.map((n) => n.name);
-      setSelected(newSelecteds);
+      const newSelected = Categories.map((n) => n.name);
+      setSelected(newSelected);
       return;
     }
     setSelected([]);
@@ -159,10 +159,10 @@ export default function Brand() {
   };
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - brands.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - Categories.length) : 0;
 
   const filteredUsers = applySortFilter(
-    brands,
+    Categories,
     getComparator(order, orderBy),
     filterName
   );
@@ -173,27 +173,20 @@ export default function Brand() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [name, setName] = useState("");
-  const [image, setImage] = useState("");
 
-  const handleAddBrand = async (e) => {
+  const handleAddCategory = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("image", image);
 
     try {
       const [res, err] = await queryApi(
-        "brand/upload/",
-        { name, image },
-        "POST",
-        true
+        "category/add-category",
+        { name },
+        "POST"
+        
       );
-      console.log(formData);
-      if (res.message === "Brand added") {
-        setImage("");
-        setName("");
-      }
-      dispatch(addBrand(res));
+      console.log("name: ");
+      console.log(name);
+      dispatch(addCategory(res));
       handleClose();
     } catch (error) {
       console.log(error);
@@ -205,44 +198,36 @@ export default function Brand() {
   const handleOpenUpdate = () => setOpenUpdate(true);
   const handleCloseUpdate = () => setOpenUpdate(false);
 
-  const handleEditBrand = async (e, id) => {
+  const handleEditCategory = async (e, id) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("image", image);
-    console.log(name, image);
-    console.log(formData);
     try {
       const [res, err] = await queryApi(
-        "brand/edit-brand/"+ id,
-        { brandId: id, name, image },
-        "PUT",
-        true
+        "category/edit-category/"+id,
+        { categoryId: id, name },
+        "PUT"
+        
       );
-      console.log(formData);
-      if (res.message === "Brand edited") {
-        setImage("");
-        setName("");
-      }
-      dispatch(updateBrand(res));
+      
+
+      dispatch(updateCategory(res));
     } catch (error) {
       console.log(error);
     }
   };
 
-  const deleteBrandFunc = async (id) => {
+  const deleteCategoryFunc = async (id) => {
     const [, err] = await queryApi(
-      "brand/delete-brand/"+id,
+      "category/delete-category/"+id,
       { },
       "DELETE"
     );
     if (err) {
       console.log(err);
-    } else dispatch(deleteBrand(id));
+    } else dispatch(deleteCategory(id));
   };
 
   return (
-    <Page title="Brand | La7winta">
+    <Page title="Category | La7winta">
       <Container>
         <Stack
           direction="row"
@@ -251,7 +236,7 @@ export default function Brand() {
           mb={5}
         >
           <Typography variant="h4" gutterBottom>
-            Brand
+            Category
           </Typography>
           <Button
             variant="contained"
@@ -260,7 +245,7 @@ export default function Brand() {
             onClick={handleOpen}
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
-            New Brand
+            New Category
           </Button>
 
           <Modal
@@ -277,21 +262,11 @@ export default function Brand() {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter Brand name"
+                    placeholder="Enter category name"
                   />
                 </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label>Brand Logo</Form.Label>
-                  <Form.Control
-                    type="file"
-                    onChange={(e) => setImage(e.target.files[0])}
-                    placeholder="Please select an image"
-                  />
-                </Form.Group>
-
                 <Button
-                  onClick={handleAddBrand}
+                  onClick={handleAddCategory}
                   type="submit"
                   variant="contained"
                   color="success"
@@ -317,7 +292,7 @@ export default function Brand() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={brands.length}
+                  rowCount={Categories.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -326,8 +301,7 @@ export default function Brand() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { _id, name, image } = row;
-                      console.log(_id);
+                      const { _id, name } = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
 
                       return (
@@ -356,8 +330,8 @@ export default function Brand() {
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <Avatar alt={name} src={image} />
-                          <TableCell align="right">
+
+                          <TableCell>
                             <Button
                               variant="outlined"
                               startIcon={<EditIcon />}
@@ -378,31 +352,17 @@ export default function Brand() {
                                     className="mb-3"
                                     controlId="formBasicEmail"
                                   >
-                                    <Form.Label>Brand Name</Form.Label>
+                                    <Form.Label>Category Name</Form.Label>
                                     <Form.Control
                                       type="text"
-                                     
+                                      // value={name}
                                       onChange={(e) => setName(e.target.value)}
-                                      placeholder={name}
-                                    />
-                                  </Form.Group>
-
-                                  <Form.Group
-                                    className="mb-3"
-                                    controlId="formBasicPassword"
-                                  >
-                                    <Form.Label>Brand Logo</Form.Label>
-                                    <Form.Control
-                                      type="file"
-                                      onChange={(e) =>
-                                        setImage(e.target.files[0])
-                                      }
-                                      placeholder="Please select an image"
+                                      placeholder="Enter Category name"
                                     />
                                   </Form.Group>
 
                                   <Button
-                                    onClick={(e) => handleEditBrand(e, _id)}
+                                    onClick={(e) => handleEditCategory(e, _id)}
                                     type="submit"
                                     variant="contained"
                                     color="success"
@@ -413,11 +373,11 @@ export default function Brand() {
                               </Box>
                             </Modal>
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell>
                             <Button
                               variant="outlined"
                               startIcon={<DeleteIcon />}
-                              onClick={() => deleteBrandFunc(_id)}
+                              onClick={() => deleteCategoryFunc(_id)}
                             >
                               Delete
                             </Button>
@@ -447,7 +407,7 @@ export default function Brand() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={brands.length}
+            count={Categories.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

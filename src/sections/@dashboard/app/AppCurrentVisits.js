@@ -9,6 +9,9 @@ import { fNumber } from '../../../utils/formatNumber';
 import { BaseOptionChart } from '../../../components/charts';
 
 // ----------------------------------------------------------------------
+import { useDispatch , useSelector} from "react-redux";
+import { useEffect } from 'react';
+import { selectProducts } from '../../../redux/slices/productsSlice';
 
 const CHART_HEIGHT = 372;
 const LEGEND_HEIGHT = 72;
@@ -35,6 +38,10 @@ const CHART_DATA = [4344, 5435, 1443, 4443];
 
 export default function AppCurrentVisits() {
   const theme = useTheme();
+
+  const dispatch = useDispatch()
+  const [products, err] = useSelector(selectProducts);
+
 
   const chartOptions = merge(BaseOptionChart(), {
     colors: [
