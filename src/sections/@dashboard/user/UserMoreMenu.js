@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import * as React from 'react';
+import Form from 'react-bootstrap/Form';
 
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -11,6 +12,8 @@ import Button from '@mui/material/Button';
 
 // component
 import Iconify from '../../../components/Iconify';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteUsers,deleteUser,disableUser } from 'src/redux/slices/userSlice';
 
 // ----------------------------------------------------------------------
 const style = {
@@ -26,11 +29,38 @@ const style = {
 };
 
 export default function UserMoreMenu({id,deleteComment}) {
+
+export default function UserMoreMenu({product}) {
+  console.log(product)
   const ref = useRef(null);
+  
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [userDeleted,errs] =useSelector(deleteUsers)
+  const dispatch = useDispatch()
+  const [name, setName] = useState(product.name);
+  const [image, setImage] = useState(product.image);
+  
+
+  const handleEditBrand = async (e,id) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("image", image);
+   
+    try {
+      const [res, err] = await queryApi('brand/edit-brand/'+id, {name,image}, 'PUT',true);
+      console.log(formData)
+     
+                      dispatch(updateBrand(res))
+                    
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
   return (
     <> 
     
@@ -38,7 +68,7 @@ export default function UserMoreMenu({id,deleteComment}) {
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
         <Iconify icon="eva:more-vertical-fill" width={20} height={20} />
       </IconButton>
-
+      
       <Menu
         open={isOpen}
         anchorEl={ref.current}
@@ -54,33 +84,21 @@ export default function UserMoreMenu({id,deleteComment}) {
             <Iconify icon="eva:trash-2-outline" width={24} height={24} />
           </ListItemIcon>
           <ListItemText primary="Delete" onClick={()=>deleteComment(id)} primaryTypographyProps={{ variant: 'body2' }} />
+          <ListItemText  onClick={()=>dispatch(deleteUser(id))} primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
         <MenuItem component={RouterLink} to="#" sx={{ color: 'text.secondary' }}>
           <ListItemIcon>
             <Iconify icon="eva:edit-fill" width={24} height={24} />
           </ListItemIcon>
-          <ListItemText onClick={()=>handleOpen} primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
-          <div> 
-          <Button onClick={handleOpen}>Open modal</Button>
-
-            <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-        </Box>
-      </Modal> </div>
+          <ListItemText onClick={()=>dispatch(disableUser(id))} primary={status?"Disable":"Enable"}  />
+         
+         
+          {/* <Button onClick={handleOpen}>Open modal</Button> */}
+        
         </MenuItem>
       </Menu>
+        
     </>
   );
 }

@@ -5,5 +5,6 @@ import {    combineReducers    } from "redux";
     import ratings from "./slices/ratingSlice";
     const reducers = combineReducers({
     products,brands,comments,ratings
+
     });
     export default reducers;

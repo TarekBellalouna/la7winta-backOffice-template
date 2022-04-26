@@ -3,17 +3,21 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
+import Coupon from './pages/Coupon';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardApp from './pages/DashboardApp';
 import Products from './pages/Products';
+////////////////////////////// nour
+import Event from './pages/Event';
 import Brand from './pages/Brand';
 import Comment from './pages/Comment';
 import Rating from './pages/Rating';
+import Category from './pages/Category';
 import Blog from './pages/Blog';
 import User from './pages/User';
-import NotFound from './pages/Page404';
-
+import NotFound from './pages/Page404'; 
+import Order from './pages/Order';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -28,8 +32,14 @@ export default function Router() {
         { path: 'brand', element: <Brand /> },
         { path: 'comment', element: <Comment /> },
         { path: 'rating', element: <Rating /> },
+
+         
+        { path: 'coupons', element: <Coupon /> },
+        { path: 'orders', element: <Order /> },
         { path: 'category', element: <Products /> },
-        { path: 'blog', element: <Blog /> }
+        { path: 'blog', element: <Blog /> },
+        { path: 'event', element: <Event /> }
+
       ]
     },
     {

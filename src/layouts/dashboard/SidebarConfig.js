@@ -35,6 +35,7 @@ const sidebarConfig = [
     title: 'rating',
     path: '/dashboard/rating',
     icon: getIcon('ant-design:star-filled')
+
   },
   {
     title: 'categories',
@@ -43,20 +44,17 @@ const sidebarConfig = [
   },
   
   {
-    title: 'blog',
-    path: '/dashboard/blog',
+    title: 'event',
+    path: '/dashboard/event',
     icon: getIcon('eva:file-text-fill')
   },
+   
   {
-    title: 'login',
-    path: '/login',
-    icon: getIcon('eva:lock-fill')
+    title: 'coupons',
+    path: '/dashboard/coupons',
+    icon: getIcon('bxs:coupon')
   },
-  {
-    title: 'register',
-    path: '/register',
-    icon: getIcon('eva:person-add-fill')
-  },
+   
   {
     title: 'Not found',
     path: '/404',
