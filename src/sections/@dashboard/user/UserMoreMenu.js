@@ -28,6 +28,7 @@ const style = {
   p: 4,
 };
 
+export default function UserMoreMenu({id,status}) {
 export default function UserMoreMenu({id,deleteComment}) {
 
 export default function UserMoreMenu({product}) {

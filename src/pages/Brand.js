@@ -1,3 +1,13 @@
+import * as React from 'react';
+import { filter } from 'lodash';
+import { sentenceCase } from 'change-case';
+import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteBrand, selectBrands } from '../redux/slices/brandsSlice';
+import Form from 'react-bootstrap/Form';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 import * as React from "react";
 import { filter } from "lodash";
 import { sentenceCase } from "change-case";
@@ -44,6 +54,20 @@ import {
 import { queryApi } from "../utils/queryApi";
 //
 import USERLIST from "../_mocks_/user";
+
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4
+};
+// material
 
 // ----------------------------------------------------------------------
 
@@ -180,6 +204,12 @@ export default function Brand() {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("image", image);
+
+    const [res, err] = await queryApi('brand/upload/', formData, 'POST',true);
+      if (res.data.message === "Brand added") {
+                      setImage("");
+                      setName(""); 
+                    }
 
     try {
       const [res, err] = await queryApi(

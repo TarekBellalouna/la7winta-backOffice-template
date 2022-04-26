@@ -42,13 +42,13 @@ const sidebarConfig = [
     path: '/dashboard/category',
     icon: getIcon('bxs:category-alt')
   },
-  
+
   {
     title: 'event',
     path: '/dashboard/event',
     icon: getIcon('eva:file-text-fill')
   },
-   
+
   {
     title: 'coupons',
     path: '/dashboard/coupons',
