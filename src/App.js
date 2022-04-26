@@ -13,7 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from 'react';
 import { fetchBrands } from './redux/slices/brandsSlice';
 import { deleteEvent, deleteEventfunction, fetchEvents } from './redux/slices/eventSlice';
- 
+import { fetchCategories } from './redux/slices/categorySlice';
+
 export default function App() {
   const [deletedEvent,errors] = useSelector(deleteEventfunction);
 
@@ -22,6 +23,7 @@ export default function App() {
   dispatch(fetchProducts())
   dispatch(fetchBrands())
   dispatch(fetchEvents())
+  dispatch(fetchCategories())
 
   },[deletedEvent])
   
